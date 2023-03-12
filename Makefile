@@ -50,6 +50,7 @@ else
 endif
 
 # Declare "make" targets.
+default: terminal
 all: dep build-js
 dep: dep-tensorflow dep-js
 biuld: build
@@ -156,6 +157,8 @@ stop:
 	./photoprism stop
 terminal:
 	$(DOCKER_COMPOSE) exec -u $(UID) photoprism bash
+run:
+	$(DOCKER_COMPOSE) exec -u $(UID) photoprism ./photoprism --public start
 rootshell: root-terminal
 root-terminal:
 	$(DOCKER_COMPOSE) exec -u root photoprism bash
@@ -208,7 +211,6 @@ build-js:
 	(cd frontend &&	env NODE_ENV=production npm run build)
 build-go: build-debug
 build-debug:
-	rm -f $(BINARY_NAME)
 	scripts/build.sh debug $(BINARY_NAME)
 build-prod:
 	rm -f $(BINARY_NAME)
