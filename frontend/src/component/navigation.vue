@@ -3,9 +3,6 @@
     <template v-if="visible && $vuetify.breakpoint.smAndDown">
       <v-toolbar dark fixed flat scroll-off-screen dense color="navigation darken-1" class="nav-small elevation-2"
                  @click.stop.prevent>
-        <v-avatar class="nav-avatar" tile :size="28" :class="{'clickable': auth}" @click.stop.prevent="showNavigation()">
-          <img :src="appIcon" :alt="config.name" :class="{'animate-hue': indexing}">
-        </v-avatar>
         <v-toolbar-title class="nav-title">
           <span :class="{'clickable': auth}" @click.stop.prevent="showNavigation()">{{ page.title }}</span>
         </v-toolbar-title>
@@ -21,9 +18,6 @@
     </template>
     <template v-else-if="visible && !auth">
       <v-toolbar dark flat scroll-off-screen dense color="navigation darken-1" class="nav-small">
-        <v-avatar class="nav-avatar" tile :size="28">
-          <img :src="appIcon" :alt="config.name">
-        </v-avatar>
         <v-toolbar-title class="nav-title">{{ page.title }}</v-toolbar-title>
         <v-btn
             fab dark :ripple="false"
@@ -48,10 +42,13 @@
     >
       <v-toolbar flat :dense="$vuetify.breakpoint.smAndDown">
         <v-list class="navigation-home">
+          <v-list-tile v-if="isMini && !isRestricted" class="nav-expand" @click.stop="toggleIsMini()">
+            <v-list-tile-action :title="$gettext('Expand')">
+              <v-icon v-if="!rtl">chevron_right</v-icon>
+              <v-icon v-else>chevron_left</v-icon>
+            </v-list-tile-action>
+          </v-list-tile>
           <v-list-tile class="nav-logo">
-            <v-list-tile-avatar class="nav-avatar clickable" @click.stop.prevent="goHome">
-              <img :src="appIcon" :alt="appName" :class="{'animate-hue': indexing}">
-            </v-list-tile-avatar>
             <v-list-tile-content>
               <v-list-tile-title class="title">{{ appName }}</v-list-tile-title>
             </v-list-tile-content>
@@ -66,13 +63,6 @@
       </v-toolbar>
 
       <v-list class="pt-3 p-flex-menu">
-        <v-list-tile v-if="isMini && !isRestricted" class="nav-expand" @click.stop="toggleIsMini()">
-          <v-list-tile-action :title="$gettext('Expand')">
-            <v-icon v-if="!rtl">chevron_right</v-icon>
-            <v-icon v-else>chevron_left</v-icon>
-          </v-list-tile-action>
-        </v-list-tile>
-
         <v-list-tile v-if="isMini && $config.feature('search')" to="/browse" class="nav-browse" @click.stop="">
           <v-list-tile-action :title="$gettext('Search')">
             <v-icon>search</v-icon>
@@ -710,7 +700,6 @@ export default {
       appNameSuffix: appNameSuffix,
       appName: this.$config.getName(),
       appAbout: this.$config.getAbout(),
-      appIcon: this.$config.getIcon(),
       indexing: false,
       drawer: null,
       featUpgrade: this.$config.getMembership() === "ce",

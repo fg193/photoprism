@@ -17,7 +17,6 @@ nav .v-list__tile__title.title {
     -webkit-box-flex: 1!important;
     -ms-flex-positive: 1!important;
     flex-grow: 1!important;
-    margin-left: 14px;
     margin-right: 14px;
     max-height: 100%;
     line-height: normal!important;
