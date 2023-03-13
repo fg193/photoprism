@@ -14,7 +14,7 @@ func IsUnique(s string, prefix byte) bool {
 
 // IsUID checks if the string is a valid entity UID.
 func IsUID(s string, prefix byte) bool {
-	if len(s) != 16 {
+	if len(s) != 9 {
 		return false
 	}
 

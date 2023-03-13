@@ -5,8 +5,14 @@ import (
 	"math/big"
 )
 
+const CharsetBase32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ"
 const CharsetBase36 = "abcdefghijklmnopqrstuvwxyz0123456789"
 const CharsetBase62 = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+// Base32 generates a random token containing lowercase letters and numbers.
+func Base32(length int) string {
+	return Charset(length, CharsetBase32)
+}
 
 // Base36 generates a random token containing lowercase letters and numbers.
 func Base36(length int) string {
