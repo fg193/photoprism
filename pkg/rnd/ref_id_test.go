@@ -56,20 +56,22 @@ func TestRefID(t *testing.T) {
 }
 
 func TestIsRefID(t *testing.T) {
-	assert.True(t, IsRefID("azn4qiw843"))
-	assert.True(t, IsRefID("abzn4qiw843"))
+	assert.False(t, IsRefID("azn4qiw843"))
+	assert.False(t, IsRefID("abzn4qiw843"))
 	assert.True(t, IsRefID("abczn4qiw843"))
 	assert.True(t, IsRefID(RefID("")))
-	assert.True(t, IsRefID(RefID("")))
+	assert.True(t, IsRefID(RefID("ab")))
+	assert.True(t, IsRefID(RefID("session")))
 	assert.False(t, IsRefID("gzn4q w8"))
 	assert.False(t, IsRefID("55785BAC-9H4B-4747-B090-EE123FFEE437"))
 	assert.False(t, IsRefID("4B1FEF2D1CF4A5BE38B263E0637EDEAD"))
 }
 
 func TestInvalidRefID(t *testing.T) {
-	assert.False(t, InvalidRefID("gzn4qiw843"))
+	assert.False(t, InvalidRefID("abczn4qiw843"))
 	assert.False(t, InvalidRefID(RefID("")))
-	assert.False(t, InvalidRefID(RefID("")))
+	assert.False(t, InvalidRefID(RefID("ab")))
+	assert.False(t, InvalidRefID(RefID("session")))
 	assert.True(t, InvalidRefID("gzn4q w8"))
 	assert.True(t, InvalidRefID("55785BAC-9H4B-4747-B090-EE123FFEE437"))
 	assert.True(t, InvalidRefID("4B1FEF2D1CF4A5BE38B263E0637EDEAD"))

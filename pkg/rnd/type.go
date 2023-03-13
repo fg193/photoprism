@@ -26,7 +26,7 @@ const (
 func IdType(id string) (Type, byte) {
 	if l := len(id); l == 0 {
 		return TypeEmpty, PrefixNone
-	} else if l < 14 || l > 128 {
+	} else if l < 12 || l > 128 {
 		return TypeUnknown, PrefixNone
 	}
 

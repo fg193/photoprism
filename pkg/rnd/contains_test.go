@@ -23,8 +23,13 @@ func TestContainsType(t *testing.T) {
 		assert.Equal(t, PrefixNone, prefix)
 	})
 	t.Run("Unknown", func(t *testing.T) {
-		result, prefix := ContainsType([]string{"dgsgseh24t"})
+		result, prefix := ContainsType([]string{"gsgseh24t"})
 		assert.Equal(t, TypeUnknown, result)
+		assert.Equal(t, PrefixNone, prefix)
+	})
+	t.Run("RefID", func(t *testing.T) {
+		result, prefix := ContainsType([]string{"refgsgseh24t"})
+		assert.Equal(t, TypeRefID, result)
 		assert.Equal(t, PrefixNone, prefix)
 	})
 	t.Run("LabelUID", func(t *testing.T) {

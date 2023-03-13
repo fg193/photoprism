@@ -7,12 +7,12 @@ import (
 )
 
 func TestBase36(t *testing.T) {
-	token := Base36(10)
+	token := Base36(12)
 	t.Logf("Base36 Token: %s", token)
 	assert.NotEmpty(t, token)
 	assert.True(t, IsRefID(token))
 	assert.False(t, InvalidRefID(token))
-	assert.Equal(t, 10, len(token))
+	assert.Equal(t, 12, len(token))
 
 	for n := 0; n < 10; n++ {
 		token = Base36(10)

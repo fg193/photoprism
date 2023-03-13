@@ -13,11 +13,7 @@ func RefID(id string) string {
 
 // IsRefID checks if the string is a valid reference ID.
 func IsRefID(s string) bool {
-	if n := len(s); n < 10 || n > 14 {
-		return false
-	}
-
-	return IsAlnum(s)
+	return len(s) == 12 && IsAlnum(s)
 }
 
 // InvalidRefID checks if the reference ID is empty or invalid.
