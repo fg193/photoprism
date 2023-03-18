@@ -73,8 +73,6 @@ func searchPhotos(f form.SearchPhotos, sess *entity.Session, resultCols string) 
 
 	// Limit search results to a specific UID scope, e.g. when sharing.
 	if txt.NotEmpty(f.Scope) {
-		f.Scope = strings.ToLower(f.Scope)
-
 		if idType, idPrefix := rnd.IdType(f.Scope); idType != rnd.TypeUID || idPrefix != entity.AlbumUID {
 			return PhotoResults{}, 0, ErrInvalidId
 		} else if a, err := entity.CachedAlbumByUID(f.Scope); err != nil || a.AlbumUID == "" {
