@@ -39,18 +39,18 @@
                 ></v-text-field>
               </v-flex>
 
-              <v-flex xs4 md1 pa-2>
+              <v-flex xs4 md2 pa-2>
                 <v-autocomplete
-                    v-model="model.Day"
+                    v-model="model.Year"
                     :append-icon="model.TakenSrc === 'manual' ? 'check' : ''"
                     :disabled="disabled"
                     :error="invalidDate"
-                    :label="$gettext('Day')"
+                    :label="$gettext('Year')"
                     browser-autocomplete="off"
                     hide-details box flat hide-no-data
                     color="secondary-dark"
-                    :items="options.Days()"
-                    class="input-day"
+                    :items="options.Years()"
+                    class="input-year"
                     @change="updateTime">
                 </v-autocomplete>
               </v-flex>
@@ -69,18 +69,18 @@
                     @change="updateTime">
                 </v-autocomplete>
               </v-flex>
-              <v-flex xs4 md2 pa-2>
+              <v-flex xs4 md1 pa-2>
                 <v-autocomplete
-                    v-model="model.Year"
+                    v-model="model.Day"
                     :append-icon="model.TakenSrc === 'manual' ? 'check' : ''"
                     :disabled="disabled"
                     :error="invalidDate"
-                    :label="$gettext('Year')"
+                    :label="$gettext('Day')"
                     browser-autocomplete="off"
                     hide-details box flat hide-no-data
                     color="secondary-dark"
-                    :items="options.Years()"
-                    class="input-year"
+                    :items="options.Days()"
+                    class="input-day"
                     @change="updateTime">
                 </v-autocomplete>
               </v-flex>
