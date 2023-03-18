@@ -22,6 +22,6 @@ func (a ResampleFilter) Imaging() imaging.ResampleFilter {
 	case ResampleLinear:
 		return imaging.Linear
 	default:
-		return imaging.Lanczos
+		return imaging.CatmullRom
 	}
 }
