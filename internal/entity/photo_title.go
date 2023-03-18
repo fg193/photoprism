@@ -156,9 +156,9 @@ func (m *Photo) UpdateTitle(labels classify.Labels) error {
 			m.SetTitle(fileTitle, SrcAuto)
 		} else {
 			if m.TakenSrc != SrcAuto {
-				m.SetTitle(fmt.Sprintf("%s / %s", UnknownTitle, m.TakenAt.Format("2006")), SrcAuto)
+				m.SetTitle(fmt.Sprintf("%s / %s", m.PhotoName, m.TakenAt.Format("2006")), SrcAuto)
 			} else {
-				m.SetTitle(UnknownTitle, SrcAuto)
+				m.SetTitle(m.PhotoName, SrcAuto)
 			}
 		}
 	}
