@@ -38,27 +38,24 @@ func ID(s string) string {
 
 // UID sanitizes unique identifier strings and returns them in lowercase.
 func UID(s string) string {
-	if l := len(s); l < 16 || l > 64 {
+	if l := len(s); l < 9 || l > 64 {
 		return ""
 	}
 
-	s = strings.ToLower(s)
-
 	// Remove all invalid characters.
-	s = strings.Map(func(r rune) rune {
+	return strings.Map(func(r rune) rune {
 		switch r {
 		case '-', '_', ':':
 			return r
 		}
-
-		if (r < '0' || r > '9') && (r < 'a' || r > 'z') {
-			return -1
+		if '0' <= r && r <= '9' {
+			return r
 		}
-
-		return r
+		if 'a' <= r && r <= 'z' || 'A' <= r && r <= 'Z' {
+			return r
+		}
+		return -1
 	}, s)
-
-	return s
 }
 
 // IdUint converts the string converted to an unsigned integer and 0 if the string is invalid.
