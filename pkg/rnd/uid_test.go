@@ -76,7 +76,15 @@ func TestGenerateUID(t *testing.T) {
 }
 
 func BenchmarkGenerateUID(b *testing.B) {
+	occupied := make(map[string]bool, b.N)
+	conflicts := 0
 	for n := 0; n < b.N; n++ {
-		GenerateUID('x')
+		uid := GenerateUID('x')
+		if occupied[uid] {
+			conflicts++
+		} else {
+			occupied[uid] = true
+		}
 	}
+	assert.Zero(b, conflicts)
 }
