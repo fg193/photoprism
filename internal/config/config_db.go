@@ -372,7 +372,7 @@ func (c *Config) connectDb() error {
 	}
 
 	// Configure database logging.
-	db.LogMode(false)
+	db.LogMode(Env(EnvTrace))
 	db.SetLogger(log)
 
 	// Set database connection parameters.
