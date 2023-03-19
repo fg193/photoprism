@@ -22,6 +22,8 @@ import (
 	"github.com/photoprism/photoprism/pkg/txt"
 )
 
+const exifDefaultTimeZone = "Asia/Shanghai"
+
 var exifIfdMapping *exifcommon.IfdMapping
 var exifTagIndex = exif.NewTagIndex()
 var exifMutex = sync.Mutex{}
@@ -263,9 +265,11 @@ func (data *Data) Exif(fileName string, fileFormat fs.Type, bruteForce bool) (er
 			data.TimeZone = zones[0]
 		}
 	}
+	if len(data.TimeZone) == 0 {
+		data.TimeZone = exifDefaultTimeZone
+	}
 
 	takenAt := time.Time{}
-
 	for _, name := range exifDateTimeTags {
 		if dateTime := txt.DateTime(data.exif[name], data.TimeZone); !dateTime.IsZero() {
 			takenAt = dateTime
