@@ -273,6 +273,7 @@
                 ></v-text-field>
               </v-flex>
 
+              <!--
               <v-flex xs12 md6 class="pa-2">
                 <v-text-field
                     v-model="model.Details.Artist"
@@ -319,6 +320,7 @@
                     class="input-license"
                 ></v-textarea>
               </v-flex>
+              -->
 
               <v-flex xs12 class="pa-2">
                 <v-textarea
