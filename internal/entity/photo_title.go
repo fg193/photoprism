@@ -235,11 +235,6 @@ func (m *Photo) FileTitle() string {
 		}
 	}
 
-	// Generate title based on photo path, if any:
-	if m.PhotoPath != "" && !fs.IsGenerated(m.PhotoPath) {
-		return txt.FileTitle(m.PhotoPath)
-	}
-
 	return ""
 }
 
