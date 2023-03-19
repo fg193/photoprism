@@ -134,21 +134,6 @@
                 </v-autocomplete>
               </v-flex>
 
-              <v-flex xs4 md2 lg2 class="pa-2">
-                <v-text-field
-                    v-model="model.Altitude"
-                    :disabled="disabled"
-                    hide-details box flat
-                    browser-autocomplete="off"
-                    autocorrect="off"
-                    autocapitalize="none"
-                    :label="$gettext('Altitude (m)')"
-                    placeholder=""
-                    color="secondary-dark"
-                    class="input-altitude"
-                ></v-text-field>
-              </v-flex>
-
               <v-flex xs4 sm6 md3 lg2 class="pa-2">
                 <v-text-field
                     v-model="model.Lat"
@@ -164,7 +149,6 @@
                     class="input-latitude"
                 ></v-text-field>
               </v-flex>
-
               <v-flex xs4 sm6 md3 lg2 class="pa-2">
                 <v-text-field
                     v-model="model.Lng"
@@ -178,6 +162,20 @@
                     placeholder=""
                     color="secondary-dark"
                     class="input-longitude"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs4 md2 lg2 class="pa-2">
+                <v-text-field
+                    v-model="model.Altitude"
+                    :disabled="disabled"
+                    hide-details box flat
+                    browser-autocomplete="off"
+                    autocorrect="off"
+                    autocapitalize="none"
+                    :label="$gettext('Altitude (m)')"
+                    placeholder=""
+                    color="secondary-dark"
+                    class="input-altitude"
                 ></v-text-field>
               </v-flex>
 
