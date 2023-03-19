@@ -258,9 +258,9 @@ func (m *Cell) Keywords() (result []string) {
 	result = append(result, txt.Keywords(txt.ReplaceSpaces(m.City(), "-"))...)
 	result = append(result, txt.Keywords(txt.ReplaceSpaces(m.State(), "-"))...)
 	result = append(result, txt.Keywords(txt.ReplaceSpaces(m.CountryName(), "-"))...)
-	result = append(result, txt.Keywords(m.Name())...)
+	// result = append(result, txt.Keywords(m.Name())...)
 	result = append(result, txt.Keywords(m.Street())...)
-	result = append(result, txt.Keywords(m.Category())...)
+	// result = append(result, txt.Keywords(m.Category())...)
 	result = append(result, txt.Words(m.Place.PlaceKeywords)...)
 
 	result = txt.UniqueWords(result)
@@ -321,6 +321,11 @@ func (m *Cell) Label() string {
 // District returns the district name if any.
 func (m *Cell) District() string {
 	return m.Place.District()
+}
+
+// NoDistrict checks if the location has no district
+func (m *Cell) NoDistrict() bool {
+	return m.District() == ""
 }
 
 // City returns the location city name if any.
