@@ -87,9 +87,9 @@ func (m *Photo) EstimateLocation(force bool) {
 	}
 
 	var err error
-
-	rangeMin := m.TakenAt.Add(-1 * time.Hour * 37)
-	rangeMax := m.TakenAt.Add(time.Hour * 37)
+	const estimateRange = 1 * time.Hour
+	rangeMin := m.TakenAt.Add(-1 * estimateRange)
+	rangeMax := m.TakenAt.Add(estimateRange)
 
 	// Find photo with location info taken at a similar time...
 	var mostRecent Photos
@@ -126,8 +126,8 @@ func (m *Photo) EstimateLocation(force bool) {
 		m.EstimateCountry()
 	} else if recentPhoto := mostRecent[0]; recentPhoto.HasLocation() && recentPhoto.HasPlace() {
 		// Too much time difference?
-		if hours := recentPhoto.TakenAt.Sub(m.TakenAt) / time.Hour; hours < -36 || hours > 36 {
-			log.Debugf("photo: skipping %s, %d hours time difference to recent position", m, hours)
+		if hours := recentPhoto.TakenAt.Sub(m.TakenAt); hours < -estimateRange || hours > estimateRange {
+			log.Debugf("photo: skipping %s, %v time difference to recent position", m, hours)
 			m.RemoveLocation(SrcEstimate, false)
 			m.RemoveLocationLabels()
 			m.EstimateCountry()
