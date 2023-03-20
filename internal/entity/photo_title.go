@@ -86,20 +86,26 @@ func (m *Photo) UpdateTitle(labels classify.Labels) error {
 				m.SetTitle(fmt.Sprintf("%s / %s / %s", names, loc.City(), m.TakenAt.Format("2006")), SrcAuto)
 			}
 		} else {
-			switch {
-			case loc.NoState() && loc.NoCity():
-				break
-			case loc.NoCity():
-				m.SetTitle(fmt.Sprintf("%s / %s", loc.State(), m.TakenAt.Format("2006")), SrcAuto)
-			case loc.LongCity(), loc.NoDistrict() && loc.NoStreet():
-				m.SetTitle(fmt.Sprintf("%s / %s", loc.City(), m.TakenAt.Format("2006")), SrcAuto)
-			case loc.NoDistrict():
-				m.SetTitle(fmt.Sprintf("%s / %s / %s", loc.City(), loc.Street(), m.TakenAt.Format("2006")), SrcAuto)
-			case loc.NoStreet():
-				m.SetTitle(fmt.Sprintf("%s / %s / %s", loc.City(), loc.District(), m.TakenAt.Format("2006")), SrcAuto)
-			default:
-				m.SetTitle(fmt.Sprintf("%s / %s / %s / %s", loc.City(), loc.District(), loc.Street(), m.TakenAt.Format("2006")), SrcAuto)
+			components := make([]string, 0, 4)
+			for _, component := range []string{
+				loc.State(),
+				loc.City(),
+				loc.District(),
+				loc.Street(),
+				loc.Name(),
+			} {
+				if len(component) != 0 {
+					components = append(components, component)
+				}
 			}
+			if len(components) > 3 {
+				components = components[1:]
+			}
+			if len(components) > 3 && len(components[len(components)-1]) > 21 {
+				components = components[:len(components)-1]
+			}
+			components = append(components, m.TakenAt.Format("2006"))
+			m.SetTitle(strings.Join(components, " / "), SrcAuto)
 			log.Debugf("photo: %s title %q based on location %+v", m.String(), m.PhotoTitle, loc)
 		}
 	}
