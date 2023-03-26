@@ -55,62 +55,15 @@ func (m *Photo) UpdateTitle(labels classify.Labels) error {
 	fileTitle := m.FileTitle()
 
 	people := m.SubjectNames()
-
 	m.UpdateDescription(people)
-
 	if n := len(people); n > 0 && n < 4 {
 		names = txt.JoinNames(people, true)
+		log.Debugf("photo: %s title based on %s (%s)", m.String(), english.Plural(len(people), "person", "people"), clean.Log(names))
 	}
 
-	knownLocation := m.LocationLoaded()
-	if knownLocation {
-		loc := m.Cell
-
+	m.updateTitleByLocationAndNames(names)
+	if m.NoTitle() {
 		// TODO: User defined title format
-		if names != "" {
-			log.Debugf("photo: %s title based on %s (%s)", m.String(), english.Plural(len(people), "person", "people"), clean.Log(names))
-
-			if l := len([]rune(names)); l > 35 {
-				m.SetTitle(names, SrcAuto)
-			} else if l > 20 && (loc.NoCity() || loc.LongCity()) {
-				m.SetTitle(fmt.Sprintf("%s / %s", names, m.TakenAt.Format("2006")), SrcAuto)
-			} else if l > 20 {
-				m.SetTitle(fmt.Sprintf("%s / %s", names, loc.City()), SrcAuto)
-			} else if loc.NoCity() || loc.LongCity() {
-				if loc.NoState() {
-					m.SetTitle(fmt.Sprintf("%s / %s", names, m.TakenAt.Format("2006")), SrcAuto)
-				} else {
-					m.SetTitle(fmt.Sprintf("%s / %s / %s", names, loc.State(), m.TakenAt.Format("2006")), SrcAuto)
-				}
-			} else {
-				m.SetTitle(fmt.Sprintf("%s / %s / %s", names, loc.City(), m.TakenAt.Format("2006")), SrcAuto)
-			}
-		} else {
-			components := make([]string, 0, 4)
-			for _, component := range []string{
-				loc.State(),
-				loc.City(),
-				loc.District(),
-				loc.Street(),
-				loc.Name(),
-			} {
-				if len(component) != 0 {
-					components = append(components, component)
-				}
-			}
-			if len(components) > 3 {
-				components = components[1:]
-			}
-			if len(components) > 3 && len(components[len(components)-1]) > 21 {
-				components = components[:len(components)-1]
-			}
-			components = append(components, m.TakenAt.Format("2006"))
-			m.SetTitle(strings.Join(components, " / "), SrcAuto)
-			log.Debugf("photo: %s title %q based on location %+v", m.String(), m.PhotoTitle, loc)
-		}
-	}
-
-	if !knownLocation || m.NoTitle() {
 		if names != "" {
 			if len([]rune(names)) <= 35 && m.TakenSrc != SrcAuto {
 				m.SetTitle(fmt.Sprintf("%s / %s", names, m.TakenAt.Format("2006")), SrcAuto)
@@ -141,6 +94,71 @@ func (m *Photo) UpdateTitle(labels classify.Labels) error {
 	}
 
 	return nil
+}
+
+func (m *Photo) updateTitleByLocationAndNames(names string) {
+	if !m.LocationLoaded() {
+		return
+	}
+	loc := m.Cell
+
+	if names == "" {
+		m.updateTitleByLocation()
+	} else if l := len([]rune(names)); l > 35 {
+		m.SetTitle(names, SrcAuto)
+	} else if l > 20 && (loc.NoCity() || loc.LongCity()) {
+		m.SetTitle(fmt.Sprintf("%s / %s", names, m.TakenAt.Format("2006")), SrcAuto)
+	} else if l > 20 {
+		m.SetTitle(fmt.Sprintf("%s / %s", names, loc.City()), SrcAuto)
+	} else if !loc.NoCity() && !loc.LongCity() {
+		m.SetTitle(fmt.Sprintf("%s / %s / %s", names, loc.City(), m.TakenAt.Format("2006")), SrcAuto)
+	} else if !loc.NoState() {
+		m.SetTitle(fmt.Sprintf("%s / %s / %s", names, loc.State(), m.TakenAt.Format("2006")), SrcAuto)
+	} else {
+		m.SetTitle(fmt.Sprintf("%s / %s", names, m.TakenAt.Format("2006")), SrcAuto)
+	}
+	log.Debugf("photo: %s title %q based on location %+v", m.String(), m.PhotoTitle, loc)
+}
+
+func (m *Photo) updateTitleByLocation() {
+	components := make([]string, 0, 5)
+	for _, component := range []string{
+		m.Cell.State(),
+		m.Cell.City(),
+		m.Cell.District(),
+		m.Cell.Street(),
+		m.Cell.Name(),
+	} {
+		if len(component) != 0 {
+			components = append(components, component)
+		}
+	}
+	if len(components) > 3 && len(components[len(components)-1]) > 24 {
+		components = components[:len(components)-1]
+	}
+	components = m.uniqueTitleComponents(components)
+	if len(components) > 3 {
+		components = components[1:]
+	}
+	components = append(components, m.TakenAt.Format("2006"))
+	m.SetTitle(strings.Join(components, " / "), SrcAuto)
+}
+
+func (_ *Photo) uniqueTitleComponents(arg []string) (ret []string) {
+	ret = make([]string, 0, len(arg)+1)
+	for i, short := range arg {
+		include := true
+		for j, long := range arg {
+			if i != j && strings.Contains(long, short) {
+				include = false
+				break
+			}
+		}
+		if include {
+			ret = append(ret, short)
+		}
+	}
+	return ret
 }
 
 // UpdateAndSaveTitle updates the photo title and saves it.
