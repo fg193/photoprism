@@ -11,7 +11,7 @@
       <div class="pswp__ui pswp__ui--hidden">
 
         <div class="pswp__top-bar">
-          <div class="pswp__title hidden-xs-only">{{ item.Title }}</div>
+          <div class="pswp__taken hidden-xs-only">{{ formatDate(item.TakenAtLocal) }}</div>
 
           <div class="pswp__counter"></div>
 
@@ -70,7 +70,7 @@
         </button>
 
         <div class="pswp__caption" @click="onPlay">
-          <div class="pswp__caption__center"><div class="taken">{{ formatDate(item.TakenAtLocal) }}</div></div>
+          <div class="pswp__caption__center"></div>
         </div>
 
       </div>

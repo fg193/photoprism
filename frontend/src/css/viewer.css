@@ -83,7 +83,7 @@
     font-size: 13px;
 }
 
-#photo-viewer .pswp__title {
+#photo-viewer .pswp__taken {
     padding: 10px;
     line-height: 20px;
     font-size: 14px;
@@ -93,6 +93,7 @@
     height: 44px;
     position: relative;
     background: none;
+    cursor: none;
     overflow: visible;
     -webkit-appearance: none;
     display: block;
